@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bland AI Voice Minutes Call Cost Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="calculator">
+        <img src="logo.jpg" alt="Company Logo" id="logo">
+        <h2>Bland AI Voice Minutes Call Cost Calculator</h2>
+        <p>The Call Cost Calculator is a web-based application designed to help businesses calculate their monthly AI Voice telephone usage costs based on call volume, duration, pricing, and dynamic packate selection. <a href="https://github.com/Czarean/aicostcalculator" target="_blank">see how it works here </a></p>
+        <button onclick="toggleTheme()" id="themeToggle">Switch to Dark Theme</button>
+        <br/>
+        
+        <br/>
+        <hr>
+        <br/>
+
+        <label for="pricePerMinute">Price Per Minute ($):</label>
+        <input type="number" id="pricePerMinute" class="price-input" value="0.09" step="0.01" required>
+
+        <label for="monthlyCalls">Total Calls per Month:</label>
+        <input type="number" id="monthlyCalls" placeholder="Enter total monthly calls" required>
+
+        <label for="avgDuration">Average Call Duration (minutes):</label>
+        <input type="number" id="avgDuration" placeholder="Enter average call duration" required>
+
+        <label for="dailyCalls">Calls per Day:</label>
+        <input type="number" id="dailyCalls" placeholder="Enter daily calls" required>
+
+        <label for="hourlyCalls">Calls per Hour:</label>
+        <input type="number" id="hourlyCalls" placeholder="Enter hourly calls" required>
+
+        <label for="concurrency">Concurrency:</label>
+        <input type="number" id="concurrency" placeholder="Enter concurrency" required>
+
+        <button onclick="calculateCost()">Calculate</button>
+
+        <div id="result" class="result"></div>
+        Developed by <a href="https://linktr.ee/IntegrAI_Ltd" target="_blank">IntegrAI Ltd</a>
+
+    </div>
+
+
+
+
+
+    <div class="package-info">
+        <h1>Bland Packages Hardcoded as of December 14, 2024!</h1>
+        <div class="plan">
+            <h2>Basic Plan: No Cost / Default</h2>
+            <ul>
+                <li><strong>Daily Cap</strong> 500 calls</li>
+                <li><strong>Hourly Cap</strong> 100 calls</li>
+                <li><strong>Concurrency</strong> 10 calls</li>
+            </ul>
+        </div>
+        <div class="plan">
+            <h2>Build Plan: $299 month</h2>
+            <ul>
+                <li><strong>Daily Cap</strong> 2000 calls</li>
+                <li><strong>Hourly Cap</strong> 400 calls</li>
+                <li><strong>Concurrency</strong> 50 calls</li>
+            </ul>
+        </div>
+        <div class="plan">
+            <h2>Scale Plan: $499 month</h2>
+            <ul>
+                <li><strong>Daily Cap</strong> 5000 calls</li>
+                <li><strong>Hourly Cap</strong> 1000 calls</li>
+                <li><strong>Concurrency</strong> 100 calls</li>
+            </ul>
+        </div>
+    </div>
+
+
+
+
+    
+    <script>
+        function calculateCost() {
+            const pricePerMinute = parseFloat(document.getElementById('pricePerMinute').value);
+            const monthlyCalls = parseInt(document.getElementById('monthlyCalls').value);
+            const avgDuration = parseFloat(document.getElementById('avgDuration').value);
+            const dailyCalls = parseInt(document.getElementById('dailyCalls').value);
+            const hourlyCalls = parseInt(document.getElementById('hourlyCalls').value);
+            const concurrency = parseInt(document.getElementById('concurrency').value);
+
+            // Determine package and monthly fee
+            let package = 'Basic';
+            let monthlyFee = 0;
+
+            if (dailyCalls > 500 || hourlyCalls > 100 || concurrency > 10) {
+                package = 'Build';
+                monthlyFee = 299;
+            }
+            if (dailyCalls > 2000 || hourlyCalls > 400 || concurrency > 50) {
+                package = 'Scale';
+                monthlyFee = 499;
+            }
+
+            // Calculate total minutes and cost
+            const totalMinutes = monthlyCalls * avgDuration;
+            const callCost = totalMinutes * pricePerMinute;
+            const totalCost = monthlyFee + callCost;
+
+            document.getElementById('result').innerHTML = `
+                <strong>Results:</strong><br>
+                Total Calls per Month: ${monthlyCalls}<br>
+                Total Minutes: ${totalMinutes.toFixed(2)}<br>
+                Selected Package: ${package}<br>
+                Monthly Cost: $${totalCost.toFixed(2)}
+            `;
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById('themeToggle');
+            body.classList.toggle('dark-theme');
+            themeToggle.innerText = body.classList.contains('dark-theme') ? 'Switch to Light Theme' : 'Switch to Dark Theme';
+        }
+    </script>
+</body>
+</html>
